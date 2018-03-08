@@ -1,0 +1,15 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "build",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/TDS171A_2018_1_Des_Web/source/Todo/TodoMvc/TodoMvc.csproj"
+            ],
+            "problemMatcher": "$msCompile"
+        }
+    ]
+}
