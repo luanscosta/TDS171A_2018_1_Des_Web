@@ -23,6 +23,6 @@ namespace TodoMvc.Data
             // Add your customizations after calling base.OnModelCreating(builder);
         }
 
-        public DbSet<TodoItem> Items {get; set; }
+        public DbSet<TodoItem> Items { get; set; }
     }
 }
