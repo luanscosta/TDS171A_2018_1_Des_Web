@@ -21,5 +21,20 @@ namespace TodoMvc.Services {
                 .ToArrayAsync();
             return items;
         }
+
+        public async Task<bool> AddItemAsync(NewTodoItem newTodoItem) {
+            var entity = new TodoItem {
+                Id = Guid.NewGuid(),
+                IsDone = false,
+                Title = newTodoItem.Title,
+                DueAt = DateTimeOffset.Now.AddDays(3)
+            };
+
+            _context.Items.Add(entity);
+
+            var saveResult = await _context.SaveChangesAsync();
+
+            return saveResult == 1;
+        }
     }
 }
