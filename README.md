@@ -14,10 +14,12 @@ Essas dependências tem de ter seu tempo de vida estimado no container que a reg
   
 Exemplo dos 3 tipos de tempo de vida  de DI:
 
+Criando as interfaces:
+
 ``` c#
 using System;
 
-namespace teste
+namespace teste.interfaces
 {
     public interface IOperacao
     {
@@ -35,79 +37,94 @@ namespace teste
     }
 }
 ```
+Criando uma classe que implementa a interface base:
 
 ``` c#
-services.AddTransient<IOperationTransient, Operation>();
-services.AddScoped<IOperationScoped, Operation>();
-services.AddSingleton<IOperationSingleton, Operation>();
+using System;
+using teste.interfaces;
+
+namespace teste.services
+{
+  public class Operacao : IOperacao
+  {
+    
+  }
+}
+```
+Adicioando injeções no Startup.cs:
+
+``` c#
+services.AddTransient<IOperacaoTransient, Operacao>();
+services.AddScoped<IOperacaoScoped, Operacao>();
+services.AddSingleton<IOperacaoSingleton, Operacao>();
 ```
 
+Criando um service que faz uso de todos os tipos de injeção de dependência:
+
 ``` c#
-using DependencyInjectionSample.Interfaces;
+using teste.interfaces;
 
-namespace DependencyInjectionSample.Services
+namespace teste.services
 {
-    public class OperationService
+    public class OperacaoService
     {
-        public IOperationTransient TransientOperation { get; }
-        public IOperationScoped ScopedOperation { get; }
-        public IOperationSingleton SingletonOperation { get; }
-        public IOperationSingletonInstance SingletonInstanceOperation { get; }
+        public IOperacaoTransient TransientOperacao { get; }
+        public IOperacaoScoped ScopedOperacao { get; }
+        public IOperacaoSingleton SingletonOperacao { get; }
 
-        public OperationService(IOperationTransient transientOperation,
-            IOperationScoped scopedOperation,
-            IOperationSingleton singletonOperation,
-            IOperationSingletonInstance instanceOperation)
+        public OperationService(IOperacaoTransient transientOperacao,
+            IOperacaoScoped scopedOperacao,
+            IOperacaoSingleton singletonOperacao)
         {
-            TransientOperation = transientOperation;
-            ScopedOperation = scopedOperation;
-            SingletonOperation = singletonOperation;
-            SingletonInstanceOperation = instanceOperation;
+            TransientOperacao = transientOperacao;
+            ScopedOperacao = scopedOperacao;
+            SingletonOperacao = singletonOperacao;
         }
     }
 }
 ```
 
+Criando um controller que faz uso de todos os tipos de injeção de dependência:
+
 ``` c#
-using DependencyInjectionSample.Interfaces;
-using DependencyInjectionSample.Services;
+using teste.interfaces;
+using teste.services;
 using Microsoft.AspNetCore.Mvc;
 
-namespace DependencyInjectionSample.Controllers
+namespace teste.controllers
 {
-    public class OperationsController : Controller
+    public class OperacoesController : Controller
     {
-        private readonly OperationService _operationService;
-        private readonly IOperationTransient _transientOperation;
-        private readonly IOperationScoped _scopedOperation;
-        private readonly IOperationSingleton _singletonOperation;
-        private readonly IOperationSingletonInstance _singletonInstanceOperation;
+        private readonly OperacaoService _operacaoService;
+        private readonly IOperacaoTransient _transientOperacao;
+        private readonly IOperacaoScoped _scopedOperacao;
+        private readonly IOperacaoSingleton _singletonOperacao;
 
-        public OperationsController(OperationService operationService,
-            IOperationTransient transientOperation,
-            IOperationScoped scopedOperation,
-            IOperationSingleton singletonOperation,
-            IOperationSingletonInstance singletonInstanceOperation)
+        public OperationsController(OperacaoService operacaoService,
+            IOperacaoTransient transientOperacao,
+            IOperacaoScoped scopedOperacao,
+            IOperacaoSingleton singletonOperacao)
         {
-            _operationService = operationService;
-            _transientOperation = transientOperation;
-            _scopedOperation = scopedOperation;
-            _singletonOperation = singletonOperation;
-            _singletonInstanceOperation = singletonInstanceOperation;
+            _operacaoService = operacaoService;
+            _transientOperacao = transientOperacao;
+            _scopedOperacao = scopedOperacao;
+            _singletonOperacao = singletonOperacao;
         }
 
         public IActionResult Index()
         {
-            // viewbag contains controller-requested services
-            ViewBag.Transient = _transientOperation;
-            ViewBag.Scoped = _scopedOperation;
-            ViewBag.Singleton = _singletonOperation;
-            ViewBag.SingletonInstance = _singletonInstanceOperation;
+            ViewBag.Transient = _transientOperacao;
+            ViewBag.Scoped = _scopedOperacao;
+            ViewBag.Singleton = _singletonOperacao;
 
-            // operation service has its own requested services
-            ViewBag.Service = _operationService;
+            ViewBag.Service = _operacaoService;
             return View();
         }
     }
 }
 ```
+
+Ao checar os ids gerados para cada uma das implementações, pode-se verificar que:
+- Instâncias do Transient sempre tem uma id diferente.
+- Instâncias do Scoped tem a mesma id durante a request.
+- Instância do Singleton tem a mesma id sempre.
