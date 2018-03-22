@@ -1,5 +1,9 @@
 ﻿$(document).ready(function(){
     $('#add-item-button').on('click', addItems);
+
+    $('.done-checkbox').on('click', function (e) {
+        markCompleted(e.target);
+    });
 });
 
 function addItems() {
@@ -17,5 +21,18 @@ function addItems() {
             var firstError = err.responseJSON[Object.keys(err.responseJSON)[0]];
             $('#add-item-error').text(firstError).show();
         }
+    });
+}
+
+function markCompleted(checkbox) {
+    checkbox.disabled = true;
+
+    var data = {
+        id: checkbox.name
+    };
+
+    $.post('/Todo/MarkDone', data, function () {
+        var row = checkbox.parentElement.parentElement;
+        $(row).addClass('done');
     });
 }
