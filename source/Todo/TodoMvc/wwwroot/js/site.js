@@ -9,9 +9,11 @@
 function addItems() {
     $('#add-item-error').hide();
     var newTitle = $('#add-item-title').val();
+    var newDate = $('#add-item-date').val();
 
     var data = {
-        title: newTitle
+        title: newTitle,
+        date: newDate
     };
 
     $.post("todo/AddItem",data, function() {

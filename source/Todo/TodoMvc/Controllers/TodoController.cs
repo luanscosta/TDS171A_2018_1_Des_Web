@@ -38,7 +38,7 @@ namespace TodoMvc.Controllers {
                 return BadRequest(new { Error= "Could not add item"});
             }
 
-            return Ok();
+            return Ok(successful);
         }
 
         public async Task<IActionResult> MarkDone(Guid id) {
@@ -47,7 +47,7 @@ namespace TodoMvc.Controllers {
 
             var successful = await _todoItemService.MarkDoneAsync(id);
 
-            return Ok();
+            return Ok(successful);
         }
     }
 }

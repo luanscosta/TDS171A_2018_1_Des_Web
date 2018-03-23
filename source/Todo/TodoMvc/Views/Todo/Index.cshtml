@@ -19,7 +19,10 @@
             @foreach(var item in Model.Items) {
                 <tr>
                     <td>
-                        <input type="checkbox" name="@item.Id" value="true" class="done-checkbox">
+                        <input type="checkbox" 
+                               name="@item.Id" 
+                               value="true" 
+                               class="done-checkbox">
                     </td>
                     <td>@item.Title</td>
                     <td>@item.DueAt.Humanize()</td>
@@ -32,6 +35,7 @@
             <div id="add-item-error" class="text-danger"></div>
             <label for="add-item-title">Add a new item:</label>
             <input id="add-item-title"/>
+            <input type="date" id="add-item-date" />
             <button type="button" id="add-item-button">Add</button>
         </form>
     </div>
