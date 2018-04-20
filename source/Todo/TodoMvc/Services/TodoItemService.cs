@@ -14,21 +14,22 @@ namespace TodoMvc.Services {
         {
             _context = context;
         }
-        public async Task<IEnumerable<TodoItem>> GetIncompleteItemsAsync() {
+        public async Task<IEnumerable<TodoItem>> GetIncompleteItemsAsync(ApplicationUser currentUser) {
             var items = await _context
                 .Items
-                .Where(x => x.IsDone == false)
+                .Where(x => x.IsDone == false && x.OwnerId == currentUser.Id)
                 .ToArrayAsync();
             return items;
         }
 
-        public async Task<bool> AddItemAsync(NewTodoItem newTodoItem) {
+        public async Task<bool> AddItemAsync(NewTodoItem newTodoItem, ApplicationUser currentUser) {
             var entity = new TodoItem {
                 Id = Guid.NewGuid(),
                 IsDone = false,
                 Title = newTodoItem.Title,
                 // DueAt = DateTimeOffset.Now.AddDays(3)
-                DueAt = newTodoItem.Date
+                DueAt = newTodoItem.Date,
+                OwnerId = currentUser.Id
             };
 
             _context.Items.Add(entity);
@@ -38,10 +39,10 @@ namespace TodoMvc.Services {
             return saveResult == 1;
         }
 
-        public async Task<bool> MarkDoneAsync(Guid id)
+        public async Task<bool> MarkDoneAsync(Guid id, ApplicationUser currentUser)
         {
             var item = await _context.Items
-                .Where(x => x.Id == id)
+                .Where(x => x.Id == id && x.OwnerId == currentUser.Id)
                 .SingleOrDefaultAsync();
 
             if(item == null)
