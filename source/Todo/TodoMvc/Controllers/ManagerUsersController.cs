@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 using TodoMvc.Models;
 using TodoMvc.Models.View;
+using System.Linq;
 
 namespace TodoMvc.Controllers {
     [Authorize(Roles = "Administrator")]
@@ -25,6 +26,33 @@ namespace TodoMvc.Controllers {
             };
 
             return View(model);
+        }
+
+        public async Task<IActionResult> MakeAdministrator(string Id) {
+            var user = await _userManager.Users
+                .Where(x => x.Id == Id)
+                .SingleOrDefaultAsync();
+                
+            if (user == null)
+                return BadRequest();
+
+            await _userManager.AddToRoleAsync(user, Constants.AdministratorRole);
+
+            return RedirectToAction(nameof(Index));
+        }
+        //
+
+        public async Task<IActionResult> UnmakeAdministrator(string Id) {
+            var user = await _userManager.Users
+                .Where(x => x.Id == Id)
+                .SingleOrDefaultAsync();
+                
+            if (user == null)
+                return BadRequest();
+
+            await _userManager.RemoveFromRoleAsync(user, Constants.AdministratorRole);
+
+            return RedirectToAction(nameof(Index));
         }
     }
 }

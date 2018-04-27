@@ -33,11 +33,13 @@ namespace TodoMvc
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
-            /*services.AddAuthentication().AddGoogle(googleOptions =>
+            services.AddAuthentication().AddGoogle(googleOptions =>
             {
-                googleOptions.ClientId = Configuration["Authentication:Google:ClientId"];
-                googleOptions.ClientSecret = Configuration["Authentication:Google:ClientSecret"];
-            });*/
+                //googleOptions.ClientId = Configuration["Authentication:Google:ClientId"];
+                //googleOptions.ClientSecret = Configuration["Authentication:Google:ClientSecret"];
+                googleOptions.ClientId = "924422722083-i66j3pr9o56hkei9kjkis15t32jgpv18.apps.googleusercontent.com";
+                googleOptions.ClientSecret = "hzNji9DXbcnEXXHj-ldwVn4a";
+            });
 
             // Add application services.
             services.AddTransient<IEmailSender, EmailSender>();
