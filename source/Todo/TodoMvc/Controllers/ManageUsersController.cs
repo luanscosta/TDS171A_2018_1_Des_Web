@@ -9,9 +9,9 @@ using System.Linq;
 
 namespace TodoMvc.Controllers {
     [Authorize(Roles = "Administrator")]
-    public class ManagerUsersController : Controller {
+    public class ManageUsersController : Controller {
         private readonly UserManager<ApplicationUser> _userManager;
-        public ManagerUsersController(UserManager<ApplicationUser> userManager) {
+        public ManageUsersController(UserManager<ApplicationUser> userManager) {
             _userManager = userManager;
         }
 
@@ -21,7 +21,7 @@ namespace TodoMvc.Controllers {
             // var everyone = await _userManager.Users.ToArrayAsync();
             var users = await _userManager.GetUsersInRoleAsync(Constants.UserRole);
 
-            var model = new ManagerUsersViewModel{
+            var model = new ManageUsersViewModel{
                 Administrators = admins,
                 Users = users
             };

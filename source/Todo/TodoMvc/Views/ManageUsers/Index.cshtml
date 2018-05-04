@@ -1,4 +1,4 @@
-@model TodoMvc.Models.View.ManagerUsersViewModel
+@model TodoMvc.Models.View.ManageUsersViewModel
 
 @{
     ViewData["Title"] = "Manage users";
@@ -24,7 +24,7 @@
             <!--<td>@user.Id</td>-->
             <td>@user.UserName</td>
             <td>@user.Email</td>
-            <td><a asp-controller="ManagerUsers" asp-action="UnmakeAdministrator" asp-route-id="@user.Id">Remover Administrador</a></td>
+            <td><a asp-action="UnmakeAdministrator" asp-route-id="@user.Id">Remover Administrador</a></td>
         </tr>
     }
     </tbody>
@@ -50,7 +50,7 @@
             <td>@user.Email</td>
             <td>
                 <a asp-controller="Todo" asp-action="UserList" asp-route-id="@user.Id">Ver Lista de Todos</a> | 
-                <a asp-controller="ManagerUsers" asp-action="MakeAdministrator" asp-route-id="@user.Id">Tornar Administrador</a>
+                <a asp-action="MakeAdministrator" asp-route-id="@user.Id">Tornar Administrador</a>
             </td>
         </tr>
     }
