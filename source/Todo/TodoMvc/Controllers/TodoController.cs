@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using TodoMvc.Services;
 using TodoMvc.Models.View;
 using TodoMvc.Models;
@@ -31,6 +32,25 @@ namespace TodoMvc.Controllers {
             
             var viewModel = new TodoViewModel{
                 Items = todoItems
+            };
+
+            return View(viewModel);
+        }
+
+        [Authorize(Roles = "Administrator")]
+        public async Task<IActionResult> UserList(string Id) {
+            var user = await _userManager.Users
+                .Where(x => x.Id == Id)
+                .SingleOrDefaultAsync();
+                
+            if (user == null)
+                return BadRequest();
+
+            var todoItems = await _todoItemService.GetIncompleteItemsAsync(user);
+            
+            var viewModel = new TodoViewModel{
+                Items = todoItems,
+                User = user
             };
 
             return View(viewModel);

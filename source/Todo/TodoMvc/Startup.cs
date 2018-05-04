@@ -29,7 +29,13 @@ namespace TodoMvc
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddIdentity<ApplicationUser, IdentityRole>()
+            services.AddIdentity<ApplicationUser, IdentityRole>(options=> {
+                options.Password.RequireDigit = false;
+                options.Password.RequiredLength = 6;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireUppercase = false;
+                options.Password.RequireLowercase = false;
+            })
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
@@ -82,12 +88,13 @@ namespace TodoMvc
 
         private static async Task EnsureRoleAsync(RoleManager<IdentityRole> roleManager)
         {
-            var alreadyExists = await roleManager.RoleExistsAsync(Constants.AdministratorRole);
+            var adminAlreadyExists = await roleManager.RoleExistsAsync(Constants.AdministratorRole);
+            var userAlreadyExists = await roleManager.RoleExistsAsync(Constants.UserRole);
 
-            if (alreadyExists)
-                return;
-
-            await roleManager.CreateAsync(new IdentityRole(Constants.AdministratorRole));
+            if (!adminAlreadyExists)
+                await roleManager.CreateAsync(new IdentityRole(Constants.AdministratorRole));
+            if (!userAlreadyExists)
+                await roleManager.CreateAsync(new IdentityRole(Constants.UserRole));
         }
 
         private static async Task EnsureTestAdminAsync(UserManager<ApplicationUser> userManager)

@@ -11,15 +11,18 @@
 <table class="table">
     <thead>
         <tr>
-            <th>Id</th>
+            <!--<th>Id</th>-->
+            <th>Nome</th>
             <th>Email</th>
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
     @foreach (var user in Model.Administrators)
     {
         <tr>
-            <td>@user.Id</td>
+            <!--<td>@user.Id</td>-->
+            <td>@user.UserName</td>
             <td>@user.Email</td>
             <td><a asp-controller="ManagerUsers" asp-action="UnmakeAdministrator" asp-route-id="@user.Id">Remover Administrador</a></td>
         </tr>
@@ -27,22 +30,28 @@
     </tbody>
 </table>
 
-<h3>Everyone</h3>
+<h3>Users</h3>
 
 <table class="table">
     <thead>
         <tr>
-            <th>Id</th>
+            <!--<th>Id</th>-->
+            <th>Nome</th>
             <th>Email</th>
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
-    @foreach (var user in Model.Everyone)
+    @foreach (var user in Model.Users)
     {
         <tr>
-            <td>@user.Id</td>
+            <!--<td>@user.Id</td>-->
+            <td>@user.UserName</td>
             <td>@user.Email</td>
-            <td><a asp-controller="ManagerUsers" asp-action="MakeAdministrator" asp-route-id="@user.Id">Tornar Administrador</a></td>
+            <td>
+                <a asp-controller="Todo" asp-action="UserList" asp-route-id="@user.Id">Ver Lista de Todos</a> | 
+                <a asp-controller="ManagerUsers" asp-action="MakeAdministrator" asp-route-id="@user.Id">Tornar Administrador</a>
+            </td>
         </tr>
     }
     </tbody>

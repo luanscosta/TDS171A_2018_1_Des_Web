@@ -16,13 +16,14 @@ namespace TodoMvc.Controllers {
         }
 
         public async Task<IActionResult> Index() {
-            var admins = await _userManager.GetUsersInRoleAsync("Administrator");
+            var admins = await _userManager.GetUsersInRoleAsync(Constants.AdministratorRole);
 
-            var everyone = await _userManager.Users.ToArrayAsync();
+            // var everyone = await _userManager.Users.ToArrayAsync();
+            var users = await _userManager.GetUsersInRoleAsync(Constants.UserRole);
 
             var model = new ManagerUsersViewModel{
                 Administrators = admins,
-                Everyone = everyone
+                Users = users
             };
 
             return View(model);
@@ -36,6 +37,7 @@ namespace TodoMvc.Controllers {
             if (user == null)
                 return BadRequest();
 
+            await _userManager.RemoveFromRoleAsync(user, Constants.UserRole);
             await _userManager.AddToRoleAsync(user, Constants.AdministratorRole);
 
             return RedirectToAction(nameof(Index));
@@ -50,6 +52,7 @@ namespace TodoMvc.Controllers {
                 return BadRequest();
 
             await _userManager.RemoveFromRoleAsync(user, Constants.AdministratorRole);
+            await _userManager.AddToRoleAsync(user, Constants.UserRole);
 
             return RedirectToAction(nameof(Index));
         }
