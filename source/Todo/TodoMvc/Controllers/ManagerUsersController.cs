@@ -40,7 +40,6 @@ namespace TodoMvc.Controllers {
 
             return RedirectToAction(nameof(Index));
         }
-        //
 
         public async Task<IActionResult> UnmakeAdministrator(string Id) {
             var user = await _userManager.Users

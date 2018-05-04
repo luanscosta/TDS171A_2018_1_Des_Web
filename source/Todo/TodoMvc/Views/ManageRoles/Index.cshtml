@@ -1,0 +1,37 @@
+@model TodoMvc.Models.View.ManageRolesViewModel
+
+@{
+    ViewData["Title"] = "Manage roles";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<h3>Roles</h3>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Nome</th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var role in Model.Roles)
+    {
+        <tr>
+            <td>@role.Id</td>
+            <td>@role.Name</td>
+            <td>
+                <form asp-action="Delete">
+                    <input type="hidden" name="Id" id="Id" value="@role.Id" />   
+                    <input type="submit" value="Remover" class="btn btn-default" />
+                </form>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
