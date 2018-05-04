@@ -6,13 +6,18 @@ using System.Threading.Tasks;
 using TodoMvc.Models;
 using TodoMvc.Models.View;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace TodoMvc.Controllers {
     [Authorize(Roles = "Administrator")]
     public class ManageUsersController : Controller {
+
         private readonly UserManager<ApplicationUser> _userManager;
-        public ManageUsersController(UserManager<ApplicationUser> userManager) {
+        private readonly RoleManager<IdentityRole> _roleManager;
+
+        public ManageUsersController(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager) {
             _userManager = userManager;
+            _roleManager = roleManager;
         }
 
         public async Task<IActionResult> Index() {
@@ -24,6 +29,35 @@ namespace TodoMvc.Controllers {
             var model = new ManageUsersViewModel{
                 Administrators = admins,
                 Users = users
+            };
+
+            return View(model);
+        }
+
+        public async Task<IActionResult> Edit(string Id) {
+            var user = await _userManager.Users
+                .Where(x => x.Id == Id)
+                .SingleOrDefaultAsync();
+                
+            if (user == null)
+                return BadRequest();
+
+            IList<string> userRoles = await _userManager.GetRolesAsync(user);
+            IdentityRole[] roles = await _roleManager.Roles.ToArrayAsync();
+
+            List<IdentityRole> tempList = new List<IdentityRole>();
+            for (int i = 0; i < roles.Length; i++)
+            {
+                if(!userRoles.Contains(roles[i].Name))
+                    tempList.Add(roles[i]);
+            }
+
+            roles = tempList.ToArray();
+
+            var model = new ManageUsersEditViewModel{
+                UserId = Id,
+                UserRoles = userRoles,
+                Roles = roles
             };
 
             return View(model);
@@ -53,6 +87,32 @@ namespace TodoMvc.Controllers {
 
             await _userManager.RemoveFromRoleAsync(user, Constants.AdministratorRole);
             await _userManager.AddToRoleAsync(user, Constants.UserRole);
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        public async Task<IActionResult> AdicionarRole(string Id, string Role) {
+            var user = await _userManager.Users
+                .Where(x => x.Id == Id)
+                .SingleOrDefaultAsync();
+                
+            if (user == null)
+                return BadRequest();
+
+            await _userManager.AddToRoleAsync(user, Role);
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        public async Task<IActionResult> RemoveRole(string Id, string Role) {
+            var user = await _userManager.Users
+                .Where(x => x.Id == Id)
+                .SingleOrDefaultAsync();
+                
+            if (user == null)
+                return BadRequest();
+
+            await _userManager.RemoveFromRoleAsync(user, Role);
 
             return RedirectToAction(nameof(Index));
         }

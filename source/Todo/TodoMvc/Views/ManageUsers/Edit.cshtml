@@ -1,0 +1,44 @@
+@model TodoMvc.Models.View.ManageUsersEditViewModel
+
+@{
+    ViewData["Title"] = "Manage user roles";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<h3>Roles</h3>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Nome</th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var role in Model.UserRoles)
+    {
+        <tr>
+            <td>@role</td>
+            <td><a asp-action="RemoveRole" asp-route-id="@Model.UserId" asp-route-role="@role">Remover Role</a></td>
+        </tr>
+    }
+    </tbody>
+</table>
+
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="AdicionarRole" method="post" class="form-horizontal">
+            <div class="form-group">
+                <input type="hidden" name="Id" id="Id" value="@Model.UserId" />
+                <select class="form-control" asp-for="Role" asp-items="@(new SelectList(Model.Roles, "Name", "Name"))"></select> 
+            </div>
+            <button type="submit" class="btn btn-default">Adicionar</button>
+        </form>
+    </div>
+</div>
+
+<hr/>
+
+<div>   
+    <a asp-action="Index">Back to List</a>   
+</div> 

@@ -3,7 +3,7 @@ using TodoMvc.Models;
 
 namespace TodoMvc.Models.View {
     public class ManageUsersViewModel {
-        public IEnumerable<ApplicationUser> Administrators {get; set; }
-        public IEnumerable<ApplicationUser> Users {get; set; }
+        public IEnumerable<ApplicationUser> Administrators { get; set; }
+        public IEnumerable<ApplicationUser> Users { get; set; }
     }
 }

@@ -10,9 +10,11 @@ using System.Linq;
 namespace TodoMvc.Controllers {
     [Authorize(Roles = "Administrator")]
     public class ManageRolesController : Controller {
+
         private readonly RoleManager<IdentityRole> _roleManager;
-        public ManageRolesController(RoleManager<IdentityRole> userManager) {
-            _roleManager = userManager;
+
+        public ManageRolesController(RoleManager<IdentityRole> roleManager) {
+            _roleManager = roleManager;
         }
 
         public async Task<IActionResult> Index() {

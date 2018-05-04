@@ -4,6 +4,6 @@ using TodoMvc.Models;
 
 namespace TodoMvc.Models.View {
     public class ManageRolesViewModel {
-        public IEnumerable<IdentityRole> Roles {get; set; }
+        public IEnumerable<IdentityRole> Roles { get; set; }
     }
 }
