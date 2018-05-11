@@ -5,6 +5,6 @@ namespace TodoMvc.Models {
     public class NewTodoItem {
         [Required]
         public string Title {get; set;}
-        public DateTime Date {get; set;}
+        public DateTimeOffset Date {get; set;}
     }
 }
