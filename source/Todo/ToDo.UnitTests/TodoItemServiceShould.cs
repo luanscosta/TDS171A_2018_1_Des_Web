@@ -14,7 +14,7 @@ namespace ToDo.UnitTests
         public async Task AddNewItemAsIncompleteWithDueDate()
         {
           var options = new DbContextOptionsBuilder<ApplicationDbContext>()
-            .UseInMemoryDatabase(databaseName: "Test_AddNewItem").Options;
+            .UseInMemorzyDatabase(databaseName: "Test_AddNewItem").Options;
 
             // Set up a context (connection to the "DB") for writing
             using (var context = new ApplicationDbContext(options))
